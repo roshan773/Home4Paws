@@ -16,7 +16,7 @@ const petSchema = mongoose.Schema({
         required: true
     },
 
-    age: { 
+    age: {
         type: Number,
         required: false
     },
@@ -48,7 +48,7 @@ const petSchema = mongoose.Schema({
 
     adopted: {
         type: Boolean,
-        required: false
+        default: false
     }
 }, {
     timestamps: true
