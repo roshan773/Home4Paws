@@ -66,8 +66,8 @@ const petController = {
 
         try {
             let pets = await Pet.findByIdAndUpdate(id, { new: true })
-            pets.adopted = !pets.adopted
-            pets.save()
+            // pets.adopted = !pets.adopted
+            // pets.save()
             return res.status(200).json({ message: " data updated", pets })
         } catch (error) {
             return res.status(500).json({ mesage: "Internal server error", error: error.message })

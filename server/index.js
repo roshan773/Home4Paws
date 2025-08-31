@@ -12,7 +12,7 @@ app.get("/", (req, res) => {
 })
 
 app.use("/api/pet/", petRouter)
-
+app.use("/api/adoption/". adoptionController)
 
 
 
