@@ -1,13 +1,13 @@
 const mongoose = require("mongoose")
 
 const adoptionSchema = mongoose.Schema({
-    petname: {
+    pet: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Pet",
         required: true
     },
 
-    adopterName: {
+    adopter: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
         required: true
@@ -19,11 +19,8 @@ const adoptionSchema = mongoose.Schema({
     },
 
     adoptionDate: {
-        type: String,
-        default: () => {
-            let today = new Date()
-            return `${today.getDate()} - ${today.getMonth()} - ${today.getFullYear()}`
-        }
+        type: Date,
+        default: Date.now
     }
 }, {
     timestamps: true,

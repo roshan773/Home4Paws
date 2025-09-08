@@ -1,6 +1,7 @@
 const express = require("express")
 const connecttoDb = require("./utils/Db")
 const petRouter = require("./router/pet.routes")
+const adoptionRouter = require("./router/adoption.routes");
 require("dotenv").config()
 const app = express()
 let PORT = process.env.PORT || 3000
@@ -12,7 +13,7 @@ app.get("/", (req, res) => {
 })
 
 app.use("/api/pet/", petRouter)
-app.use("/api/adoption/". adoptionController)
+app.use("/api/adoption/", adoptionRouter)
 
 
 
