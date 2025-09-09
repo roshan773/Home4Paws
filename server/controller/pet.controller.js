@@ -62,12 +62,9 @@ const petController = {
 
     update: async (req, res) => {
         const { id } = req.params
-        // res.status(200).json({message: `${name} data updated`})
 
         try {
             let pets = await Pet.findByIdAndUpdate(id, { new: true })
-            // pets.adopted = !pets.adopted
-            // pets.save()
             return res.status(200).json({ message: " data updated", pets })
         } catch (error) {
             return res.status(500).json({ mesage: "Internal server error", error: error.message })
@@ -79,7 +76,7 @@ const petController = {
             const { id } = req.params
 
             let pets = await Pet.findByIdAndDelete(id)
-            return res.status(200).json({ message: " data updated" })
+            return res.status(200).json({ message: " data updated", pets })
         } catch (error) {
             return res.status(500).json({ mesage: "Internal server error", error: error.message })
         }

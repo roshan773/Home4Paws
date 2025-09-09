@@ -4,23 +4,26 @@ const adoptionSchema = mongoose.Schema({
     pet: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Pet",
-        required: true
+        required: true,
+        immutable: true
     },
 
     adopter: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
-        required: true
+        type: String,
+        required: true,
+        immutable: true
     },
 
     adopterContact: {
         type: String,
-        required: true
+        required: true,
+        immutable: true
     },
 
     adoptionDate: {
         type: Date,
-        default: Date.now
+        default: Date.now,
+        immutable: true
     }
 }, {
     timestamps: true,

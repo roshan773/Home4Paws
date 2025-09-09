@@ -6,38 +6,73 @@ const Adoption = require("../model/adoption.model")
 
 const adoptionController = {
     test: (req, res) => {
-        res.status(200).json({message: "Adoption rout is working"})
+        res.status(200).json({ message: "Adoption rout is working" })
     },
 
-    getPetDetail: async(req, res) => {
-        const {petId} = req.params
+    getPetDetail: async (req, res) => {
+        const { petId } = req.params
 
         try {
             const pet = await Pet.findById(petId).select("name petType breed vaccinated")
 
-            if(!pet){
-                res.status(400).json({message: "Pet does not found"})
+            if (!pet) {
+                res.status(400).json({ message: "Pet does not found" })
             }
 
             return res.status(200).json(pet)
         } catch (error) {
-            return res.status(500).json({message: "Internal Server Error", error})
+            return res.status(500).json({ message: "Internal Server Error", error })
         }
     },
 
-    create: async(req, res) => {
-        const {petId} = req.params
-        const {adopter, adopterContact} = req.body
+    // create: async (req, res) => {
+    //     const { petId } = req.params
+    //     const { adopter, adopterContact } = req.body
+
+    //     try {
+
+    //         if (!mongoose.Types.ObjectId.isValid(petId)) {
+    //             return res.status(404).json({ message: "Invalid Pet ID" })
+    //         }
+
+    //         const pet = await Pet.findById(petId)
+    //         if (!pet) {
+    //             return res.status(400).json({ message: "Pet Not found" })
+    //         }
+
+    //         const existingPet = await Adoption.findOne({ pet: petId })
+    //         if (existingPet) {
+    //             return res.status(400).json({ message: "Pet Already has been adopted" })
+    //         }
+
+    //         const adoption = await Adoption.create({
+    //             pet: petId,
+    //             adopter,
+    //             adopterContact
+    //         })
+    //         return res.status(200).json({ message: "Adoption successful", adoption })
+    //     } catch (error) {
+    //         return res.status(500).json({ message: "Internal server error", error: error.message })
+    //     }
+    // }
+
+    create: async (req, res) => {
+        const { petId } = req.params
+        const { adopter, adopterContact } = req.body
 
         try {
-
-            if(!mongoose.Types.ObjectId.isValid(petId)){
-                return res.status(404).json({message: "Invalid Pet ID"})
+            if (!mongoose.Types.ObjectId.isValid(petId)) {
+                return res.status(400).json({ message: "Invalid pet id" })
             }
 
             const pet = await Pet.findById(petId)
-            if(!pet){
-                return res.status(400).json({message: "Pet Not found"})
+            if (!pet) {
+                return res.status(404).json({ message: "Pet Not Found", pet })
+            }
+
+            const AdoptionPet = await Adoption.findOne({ pet: petId })
+            if (AdoptionPet) {
+                return res.status(409).json({ message: "Pet has been adopted already" })
             }
 
             const adoption = await Adoption.create({
@@ -45,12 +80,15 @@ const adoptionController = {
                 adopter,
                 adopterContact
             })
-            return res.status(200).json({message: "Adoption successful", adoption})
+
+            pet.adopted = true
+            pet.save()
+            return res.status(200).json({ message: "Adoption of Pet Done" , adoption, pet})
         } catch (error) {
-            return res.status(500).json({message: "Internal server error", error:error.message})
+            return res.status(500).json({ message: "Internal Server Error", error: error.message })
         }
     }
-    
+
 }
 
 module.exports = adoptionController
