@@ -1,4 +1,5 @@
 const express = require("express")
+
 const Pet = require("../model/pet.model")
 
 const petController = {
@@ -7,14 +8,15 @@ const petController = {
     },
 
     create: async (req, res) => {
-        const { name, petType, breed, age, description, location, vaccinated, image, contact } = req.body
+        const { name, petType, breed, age, description, location, vaccinated, image, price } = req.body
 
         try {
-            if (!name || !petType || !breed || !age || !description || !location || !vaccinated || !image || !contact) {
+            if (!name || !petType || !breed || age === undefined || description === undefined || !location || !vaccinated || !image || !price) {
                 return res.status(422).json({ mesage: "All fields are required, Something is missing " })
             }
 
             let newpet = await Pet.create({ ...req.body })
+            req.io.emit("Pet Added", newpet)
             return res.status(200).json({ message: `${name} data added successfully`, newpet })
         } catch (error) {
             return res.status(500).json({ message: "Internal server Error", error: error.message })
@@ -57,6 +59,16 @@ const petController = {
             return res.status(200).json(pets)
         } catch (error) {
             return res.status(200).json({ message: "Internal Server error", error })
+        }
+    },
+
+    getById: async (req, res) => {
+
+        try {
+            let pets = await Pet.find()
+            return res.status(200).json({message: "All pet data fetched", pets})
+        } catch (error) {
+            return res.status(500).json({message: "Unable to fetch", error: error.message})
         }
     },
 

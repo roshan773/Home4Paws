@@ -25,37 +25,6 @@ const adoptionController = {
         }
     },
 
-    // create: async (req, res) => {
-    //     const { petId } = req.params
-    //     const { adopter, adopterContact } = req.body
-
-    //     try {
-
-    //         if (!mongoose.Types.ObjectId.isValid(petId)) {
-    //             return res.status(404).json({ message: "Invalid Pet ID" })
-    //         }
-
-    //         const pet = await Pet.findById(petId)
-    //         if (!pet) {
-    //             return res.status(400).json({ message: "Pet Not found" })
-    //         }
-
-    //         const existingPet = await Adoption.findOne({ pet: petId })
-    //         if (existingPet) {
-    //             return res.status(400).json({ message: "Pet Already has been adopted" })
-    //         }
-
-    //         const adoption = await Adoption.create({
-    //             pet: petId,
-    //             adopter,
-    //             adopterContact
-    //         })
-    //         return res.status(200).json({ message: "Adoption successful", adoption })
-    //     } catch (error) {
-    //         return res.status(500).json({ message: "Internal server error", error: error.message })
-    //     }
-    // }
-
     create: async (req, res) => {
         const { petId } = req.params
         const { adopter, adopterContact } = req.body
@@ -83,6 +52,7 @@ const adoptionController = {
 
             pet.adopted = true
             pet.save()
+            req.io.emit("Pet Adopted")
             return res.status(200).json({ message: "Adoption of Pet Done" , adoption, pet})
         } catch (error) {
             return res.status(500).json({ message: "Internal Server Error", error: error.message })

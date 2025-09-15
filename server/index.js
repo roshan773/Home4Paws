@@ -5,6 +5,7 @@ const connecttoDb = require("./utils/Db")
 const petRouter = require("./router/pet.routes")
 const adoptionRouter = require("./router/adoption.routes");
 const { Server } = require("socket.io")
+const setupsocket = require("./socket")
 require("dotenv").config()
 const app = express()
 let PORT = process.env.PORT || 3000
@@ -19,9 +20,6 @@ app.get("/", (req, res) => {
     res.send("ALL ROUTES IS WORKING")
 })
 
-app.use("/api/pet/", petRouter)
-app.use("/api/adoption/", adoptionRouter)
-
 // ----------------Socket.io----------------
 const server = http.createServer(app)
 
@@ -32,14 +30,24 @@ const io = new Server(server, {
     }
 })
 
-app.set("io", io)
+// app.set("io", io)
 
+app.use((req, res, next) => {
+    req.io = io
+
+    next()
+})
+
+app.use("/api/pet/", petRouter)
+app.use("/api/adoption/", adoptionRouter)
+
+setupsocket(io)
 
 
 server.listen(PORT , async() => {
     try {
         console.log("Server is running");
-        connecttoDb()
+        await connecttoDb()
     } catch (error) {
         console.log("Internal server error", error)
     }

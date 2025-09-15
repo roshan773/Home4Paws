@@ -36,13 +36,19 @@ const petSchema = mongoose.Schema({
         required: true,
     },
 
+    gender: {
+        type: String,
+        enum: ["Male", "Female"],
+        required: true
+    },
+
     image: {
         type: String,
         required: true
     },
 
-    contact: {
-        type: String,
+    price: {
+        type: Number,
         required: true
     },
 

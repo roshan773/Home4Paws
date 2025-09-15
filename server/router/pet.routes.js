@@ -4,6 +4,7 @@ const petRouter = express.Router()
 
 petRouter.get("/test", petController.test)
 petRouter.post("/", petController.create)
+petRouter.get("/", petController.getById)
 petRouter.post("/filter", petController.filter)
 petRouter.post("/search", petController.search)
 petRouter.patch("/:id", petController.update)
