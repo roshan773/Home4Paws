@@ -6,6 +6,7 @@ const petRouter = require("./router/pet.routes")
 const adoptionRouter = require("./router/adoption.routes");
 const { Server } = require("socket.io")
 const setupsocket = require("./socket")
+const userRouter = require("./router/user.routes")
 require("dotenv").config()
 const app = express()
 let PORT = process.env.PORT || 3000
@@ -40,6 +41,7 @@ app.use((req, res, next) => {
 
 app.use("/api/pet/", petRouter)
 app.use("/api/adoption/", adoptionRouter)
+app.use("/api/user/", userRouter)
 
 setupsocket(io)
 
